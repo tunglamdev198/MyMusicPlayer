@@ -3,6 +3,7 @@ package com.lamnt.musicdemo;
 import android.content.Context;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -55,11 +56,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private AudioManager audioManager;
 
+    private Handler mHandler;
+
     private int currentPosition;
     private int nextPosition;
     private int previousPosition;
 
     private int mediaDuration;
+
+    private Runnable mRunnable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         sbTime = findViewById(R.id.sb_time);
         sbVolume = findViewById(R.id.sb_volume);
         songs = SongUtil.getSong(this);
+        mHandler = new Handler();
     }
 
     private void configVolume() {
@@ -140,8 +146,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 fetchData();
                 initState();
                 songPlayer.play(MainActivity.this, currentSong.getData());
-                sbTime.setMax(songPlayer.getMaxDuration());
-                txtTime.setText(generateTime(songPlayer.getMaxDuration()));
+                sbTime.setMax(songPlayer.getMaxDuration() / 1000);
+                mRunnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        if (songPlayer != null) {
+                            int mCurrentPosition = songPlayer.getMediaPlayer().getCurrentPosition(); // In milliseconds
+                            sbTime.setProgress(mCurrentPosition/1000);
+                            txtTime.setText(generateTime( mCurrentPosition) + "/" + generateTime(songPlayer.getMaxDuration()));
+                        }
+                        mHandler.postDelayed(mRunnable, 1000);
+                    }
+                };
+                mHandler.postDelayed(mRunnable, 1000);
             }
         });
     }
