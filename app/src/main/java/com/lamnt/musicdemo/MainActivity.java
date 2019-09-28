@@ -5,8 +5,6 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -60,6 +58,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private int currentPosition;
     private int nextPosition;
     private int previousPosition;
+
+    private int mediaDuration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,6 +140,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 fetchData();
                 initState();
                 songPlayer.play(MainActivity.this, currentSong.getData());
+                sbTime.setMax(songPlayer.getMaxDuration());
+                txtTime.setText(generateTime(songPlayer.getMaxDuration()));
             }
         });
     }
@@ -150,6 +152,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else {
             btnPlayPause.setImageResource(R.drawable.ic_play);
         }
+    }
+
+    private String generateTime(int duration) {
+        String time = "";
+        int min = duration / 1000 / 60;
+        int sec = duration / 1000 % 60;
+        time += min + ":";
+        if (sec < 10) {
+            time += "0" + sec;
+        } else {
+            time += sec;
+        }
+        return time;
     }
 
     private void search() {
@@ -215,6 +230,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void fetchData() {
         txtName.setText(currentSong.getName());
         txtAuthor.setText(currentSong.getArtist());
+        txtTime.setText(generateTime(currentSong.getTime()));
     }
 
     private void previousSong() {

@@ -4,9 +4,9 @@ public class Song {
     private String data;
     private String name;
     private String artist;
-    private long time;
+    private int time;
 
-    public Song(String data, String name, String artist,long time) {
+    public Song(String data, String name, String artist,int time) {
         this.data = data;
         this.name = name;
         this.artist = artist;
@@ -37,11 +37,11 @@ public class Song {
         this.artist = artist;
     }
 
-    public long getTime() {
+    public int getTime() {
         return time;
     }
 
-    public void setTime(long time) {
+    public void setTime(int time) {
         this.time = time;
     }
 

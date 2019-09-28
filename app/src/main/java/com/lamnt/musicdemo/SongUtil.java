@@ -44,7 +44,7 @@ public class SongUtil {
             String data = cursor.getString(indexData);
             String title = cursor.getString(indexTitle);
             String author = cursor.getString(indexAuthor);
-            long time = cursor.getLong(indexDuration);
+            int time = cursor.getInt(indexDuration);
 
             songs.add(new Song(data, title, author, time));
 

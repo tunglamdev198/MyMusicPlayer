@@ -23,9 +23,6 @@ public class SongPlayer {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-            // Quy định luồng chạy
-
             AudioAttributes audioAttributes = new AudioAttributes.Builder()
                     .setLegacyStreamType(AudioManager.STREAM_MUSIC).build();
 
@@ -80,7 +77,19 @@ public class SongPlayer {
         }
     }
 
-    public boolean isStateIdle(){
+    public MediaPlayer getMediaPlayer() {
+        return mediaPlayer;
+    }
+
+    public int getMaxDuration() {
+        return mediaPlayer.getDuration();
+    }
+
+    public int getCurentDuration() {
+        return mediaPlayer.getCurrentPosition();
+    }
+
+    public boolean isStateIdle() {
         return songState == SongState.IDLE;
     }
 
